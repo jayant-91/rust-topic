@@ -76,10 +76,37 @@ fn main() {
 
     // Defining list of sellable item
     // For defining trait type dynamic variable we have to put "dyn" keyword before the trait type
+    // this vector can only store reference of these trait objects
+    // if we need to have the ownership of thesse trait objects we need to put them into boxes
     let sellagles: Vec<&dyn Sellable> = vec![&sword, &shield];
 
     // Looping over the loop 
     for s in sellagles {
         println!("{}", vendor_text_dynamic(s));
+    }
+
+
+    // if we need to have the wonership of the trait objects in the vendor vector as well
+    //  we need to put them into boxes
+    let owned_sellables: Vec<Box<dyn Sellable>> = vec![
+        //Box::new() take teh wonership and new Sword and Shild stored in the heap
+        Box::new(
+            Sword{ 
+                name: "Blade in teh Heap".into(), 
+                damage: 55, 
+                swing_time_ms: 3000 
+            }
+        ), 
+        Box::new(
+            Shield{
+                name: "Shield of dynamic Memory".into(),
+                armor: 130,
+                block: 55,
+            }
+        )
+    ];
+
+    for s in &owned_sellables {
+        println!("{}", vendor_text_dynamic(s.as_ref()));
     }
 }
